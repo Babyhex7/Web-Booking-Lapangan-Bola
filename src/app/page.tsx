@@ -1,53 +1,84 @@
+'use client';
+
+import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
+import Button from '@/components/ui/Button';
+import Card from '@/components/ui/Card';
+
+// Homepage dengan hero section & features
 export default function HomePage() {
+  const { user } = useAuth();
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
-          Sistem Booking Lapangan Bola
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+      {/* Hero Section */}
+      <div className="container mx-auto px-4 py-16 text-center">
+        <h1 className="text-5xl font-bold text-gray-900 mb-4">
+          Booking Lapangan Bola
         </h1>
-        <p className="text-lg text-gray-600 mb-8">
-          Backend API sudah siap digunakan!
+        <p className="text-xl text-gray-600 mb-8">
+          Sistem pemesanan lapangan bola online yang mudah dan cepat
         </p>
-        <div className="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
-          <h2 className="text-xl font-semibold mb-4">API Endpoints:</h2>
-          <div className="text-left space-y-2 text-sm">
-            <p><strong>Auth:</strong></p>
-            <ul className="list-disc list-inside ml-4 space-y-1">
-              <li>POST /api/auth/register - Daftar user baru</li>
-              <li>POST /api/auth/login - Login user</li>
-              <li>POST /api/auth/logout - Logout user</li>
-              <li>GET /api/auth/me - Get user profile</li>
-            </ul>
-            <p><strong>Lapangan:</strong></p>
-            <ul className="list-disc list-inside ml-4 space-y-1">
-              <li>GET /api/lapangan - List semua lapangan</li>
-              <li>POST /api/lapangan - Buat lapangan (Admin)</li>
-              <li>GET /api/lapangan/[id] - Detail lapangan</li>
-              <li>PUT /api/lapangan/[id] - Update lapangan (Admin)</li>
-              <li>DELETE /api/lapangan/[id] - Hapus lapangan (Admin)</li>
-            </ul>
-            <p><strong>Booking:</strong></p>
-            <ul className="list-disc list-inside ml-4 space-y-1">
-              <li>GET /api/booking - List booking</li>
-              <li>POST /api/booking - Buat booking</li>
-              <li>GET /api/booking/[id] - Detail booking</li>
-              <li>PUT /api/booking/[id] - Update booking (Admin)</li>
-              <li>DELETE /api/booking/[id] - Hapus booking (Admin)</li>
-              <li>POST /api/booking/cancel - Cancel booking</li>
-              <li>POST /api/booking/check-availability - Cek ketersediaan</li>
-            </ul>
-            <p><strong>User:</strong></p>
-            <ul className="list-disc list-inside ml-4 space-y-1">
-              <li>GET /api/user/profile - Get profile</li>
-              <li>PUT /api/user/profile - Update profile</li>
-              <li>GET /api/user/history - Riwayat booking</li>
-            </ul>
-          </div>
+        
+        <div className="flex justify-center gap-4">
+          <Link href="/lapangan">
+            <Button size="lg">Lihat Lapangan</Button>
+          </Link>
+          {!user && (
+            <Link href="/auth/register">
+              <Button variant="outline" size="lg">Daftar Sekarang</Button>
+            </Link>
+          )}
         </div>
-        <div className="mt-6 text-sm text-gray-500">
-          <p>Dokumentasi lengkap ada di README.md</p>
+      </div>
+
+      {/* Features */}
+      <div className="container mx-auto px-4 py-12">
+        <h2 className="text-3xl font-bold text-center mb-8">Kenapa Pilih Kami?</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card className="text-center">
+            <div className="text-4xl mb-4">⚡</div>
+            <h3 className="text-xl font-semibold mb-2">Booking Cepat</h3>
+            <p className="text-gray-600">
+              Proses booking mudah dan cepat hanya dalam beberapa klik
+            </p>
+          </Card>
+
+          <Card className="text-center">
+            <div className="text-4xl mb-4">💳</div>
+            <h3 className="text-xl font-semibold mb-2">Harga Transparan</h3>
+            <p className="text-gray-600">
+              Harga yang jelas tanpa biaya tersembunyi
+            </p>
+          </Card>
+
+          <Card className="text-center">
+            <div className="text-4xl mb-4">📱</div>
+            <h3 className="text-xl font-semibold mb-2">Kelola Booking</h3>
+            <p className="text-gray-600">
+              Kelola dan lihat riwayat booking dengan mudah
+            </p>
+          </Card>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="bg-blue-600 text-white py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-4">
+            Siap untuk Booking Lapangan?
+          </h2>
+          <p className="text-xl mb-8">
+            Daftar sekarang dan mulai booking lapangan favoritmu
+          </p>
+          <Link href={user ? '/lapangan' : '/auth/register'}>
+            <Button size="lg" variant="secondary">
+              {user ? 'Lihat Lapangan' : 'Daftar Gratis'}
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
-  )
+  );
 }

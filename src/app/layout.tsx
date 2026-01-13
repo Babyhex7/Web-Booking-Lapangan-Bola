@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { AuthProvider } from '@/contexts/AuthContext'
+import Navbar from '@/components/ui/Navbar'
 
 export const metadata: Metadata = {
   title: 'Booking Lapangan Bola',
@@ -13,7 +15,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id">
-      <body>{children}</body>
+      <body>
+        <AuthProvider>
+          <Navbar />
+          {children}
+        </AuthProvider>
+      </body>
     </html>
   )
 }

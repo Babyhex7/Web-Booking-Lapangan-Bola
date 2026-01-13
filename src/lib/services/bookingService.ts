@@ -163,7 +163,7 @@ export class BookingService {
     }
   }
 
-  // Update booking (untuk admin update status, dll)
+  // Update booking
   static async updateBooking(id: number, data: Partial<BookingAttributes>) {
     try {
       const booking = await Booking.findByPk(id);
