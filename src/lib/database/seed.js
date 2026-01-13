@@ -18,11 +18,11 @@ const sequelize = new Sequelize(
 // Script untuk seed data awal ke database
 async function seed() {
   try {
-    console.log("🌱 Memulai seeding data...");
+    console.log("Memulai seeding data...");
 
     // Test koneksi
     await sequelize.authenticate();
-    console.log("✅ Koneksi database berhasil!");
+    console.log("Koneksi database berhasil!");
 
     // Definisi model User (harus sama dengan migrate.js)
     const User = sequelize.define(
@@ -88,7 +88,7 @@ async function seed() {
     );
 
     // Seed Users
-    console.log("\n📝 Membuat users...");
+    console.log("\nMembuat users...");
     const hashedPassword = await bcrypt.hash("password123", 10);
 
     const admin = await User.create({
@@ -107,10 +107,10 @@ async function seed() {
       role: "user",
     });
 
-    console.log("✅ Users berhasil dibuat!");
+    console.log("Users berhasil dibuat!");
 
     // Seed Lapangan
-    console.log("\n📝 Membuat lapangan...");
+    console.log("\nMembuat lapangan...");
 
     const lapangan1 = await Lapangan.create({
       nama: "Lapangan Futsal A",
@@ -149,10 +149,10 @@ async function seed() {
       status: "aktif",
     });
 
-    console.log("✅ Lapangan berhasil dibuat!");
+    console.log("Lapangan berhasil dibuat!");
 
     // Seed Bookings (contoh)
-    console.log("\n📝 Membuat booking sample...");
+    console.log("\nMembuat booking sample...");
 
     const booking1 = await Booking.create({
       user_id: user1.id,
@@ -175,20 +175,20 @@ async function seed() {
       status: "pending",
     });
 
-    console.log("✅ Booking berhasil dibuat!");
+    console.log("Booking berhasil dibuat!");
 
-    console.log("\n🎉 Seeding selesai!");
-    console.log("\n📊 Summary:");
+    console.log("\nSeeding selesai!");
+    console.log("\nSummary:");
     console.log(`- ${2} users dibuat (1 admin, 1 user)`);
     console.log(`- ${3} lapangan dibuat`);
     console.log(`- ${2} booking sample dibuat`);
-    console.log("\n🔐 Login credentials:");
+    console.log("\nLogin credentials:");
     console.log("Admin: admin@lapangan.com / password123");
     console.log("User: user@example.com / password123");
 
     process.exit(0);
   } catch (error) {
-    console.error("❌ Seeding gagal:", error);
+    console.error("Seeding gagal:", error);
     process.exit(1);
   }
 }

@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     // Cek autentikasi
     const user = getUserFromRequest(request);
 
-    // Ambil query params untuk filter
+
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
     const tanggal = searchParams.get('tanggal');

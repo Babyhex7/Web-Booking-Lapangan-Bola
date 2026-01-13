@@ -24,10 +24,10 @@ const sequelize = new Sequelize(
 export const testConnection = async () => {
   try {
     await sequelize.authenticate();
-    console.log('✅ Koneksi database berhasil!');
+    console.log('Koneksi database berhasil!');
     return true;
   } catch (error) {
-    console.error('❌ Koneksi database gagal:', error);
+    console.error('Koneksi database gagal:', error);
     return false;
   }
 };
@@ -36,9 +36,9 @@ export const testConnection = async () => {
 export const syncDatabase = async (force = false) => {
   try {
     await sequelize.sync({ force }); // force: true akan drop table dan buat ulang
-    console.log('✅ Sinkronisasi database berhasil!');
+    console.log('Sinkronisasi database berhasil!');
   } catch (error) {
-    console.error('❌ Sinkronisasi database gagal:', error);
+    console.error('Sinkronisasi database gagal:', error);
     throw error;
   }
 };

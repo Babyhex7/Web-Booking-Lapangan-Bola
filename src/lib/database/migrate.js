@@ -17,11 +17,11 @@ const sequelize = new Sequelize(
 // Script untuk migrate (sync) database
 async function migrate() {
   try {
-    console.log("🔄 Memulai migrasi database...");
+    console.log("Memulai migrasi database...");
 
     // Test koneksi terlebih dahulu
     await sequelize.authenticate();
-    console.log("✅ Koneksi database berhasil!");
+    console.log("Koneksi database berhasil!");
 
     // Definisi model User
     const User = sequelize.define(
@@ -170,7 +170,7 @@ async function migrate() {
     // Sync database (force: false agar tidak drop table existing)
     await sequelize.sync({ force: false });
 
-    console.log("✅ Migrasi database berhasil!");
+    console.log("Migrasi database berhasil!");
     console.log("\nTabel yang dibuat:");
     console.log("- users");
     console.log("- lapangan");
@@ -178,7 +178,7 @@ async function migrate() {
 
     process.exit(0);
   } catch (error) {
-    console.error("❌ Migrasi gagal:", error);
+    console.error("Migrasi gagal:", error);
     process.exit(1);
   }
 }
