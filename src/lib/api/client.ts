@@ -5,13 +5,17 @@ const API_URL = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 async function fetchAPI(endpoint: string, options: RequestInit = {}) {
   const token = localStorage.getItem('token');
   
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     'Content-Type': 'application/json',
-    ...options.headers,
   };
   
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
+  }
+  
+  // Merge with existing headers from options
+  if (options.headers) {
+    Object.assign(headers, options.headers);
   }
   
   const response = await fetch(`${API_URL}${endpoint}`, {
