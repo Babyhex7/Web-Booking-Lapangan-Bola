@@ -7,13 +7,28 @@ import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 
+// Helper untuk parse fasilitas dari berbagai format
+const parseFasilitas = (fasilitas: any): string[] => {
+  if (!fasilitas) return [];
+  if (Array.isArray(fasilitas)) return fasilitas;
+  if (typeof fasilitas === 'string') {
+    try {
+      const parsed = JSON.parse(fasilitas);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+};
+
 // Interface untuk Lapangan
 interface Lapangan {
   id: number;
   nama: string;
   deskripsi: string;
   harga_per_jam: number;
-  fasilitas: string[];
+  fasilitas: string[] | string;
   status: string;
 }
 
@@ -105,7 +120,7 @@ export default function LapanganPage() {
 
               {/* Fasilitas */}
               <div className="flex flex-wrap gap-2">
-                {item.fasilitas.slice(0, 3).map((fasilitas, idx) => (
+                {parseFasilitas(item.fasilitas).slice(0, 3).map((fasilitas, idx) => (
                   <span 
                     key={idx}
                     className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded"
@@ -113,9 +128,9 @@ export default function LapanganPage() {
                     {fasilitas}
                   </span>
                 ))}
-                {item.fasilitas.length > 3 && (
+                {parseFasilitas(item.fasilitas).length > 3 && (
                   <span className="text-xs text-gray-500">
-                    +{item.fasilitas.length - 3} lainnya
+                    +{parseFasilitas(item.fasilitas).length - 3} lainnya
                   </span>
                 )}
               </div>

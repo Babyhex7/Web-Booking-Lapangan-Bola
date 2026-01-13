@@ -9,14 +9,29 @@ import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import Modal from '@/components/ui/Modal';
 
+// Helper untuk parse JSON fields
+const parseJSON = (data: any): any => {
+  if (!data) return [];
+  if (Array.isArray(data)) return data;
+  if (typeof data === 'string') {
+    try {
+      const parsed = JSON.parse(data);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+};
+
 // Interface untuk Lapangan detail
 interface Lapangan {
   id: number;
   nama: string;
   deskripsi: string;
   harga_per_jam: number;
-  fasilitas: string[];
-  foto_url: string[];
+  fasilitas: string[] | string;
+  foto_url: string[] | string;
   status: string;
 }
 
@@ -54,12 +69,31 @@ export default function LapanganDetailPage({ params }: { params: { id: string } 
     }
   };
 
+  // Calculate duration dan harga
+  const calculateDuration = () => {
+    if (!bookingData.jam_mulai || !bookingData.jam_selesai) return 0;
+    const [startHour, startMin] = bookingData.jam_mulai.split(':').map(Number);
+    const [endHour, endMin] = bookingData.jam_selesai.split(':').map(Number);
+    const startMinutes = startHour * 60 + startMin;
+    const endMinutes = endHour * 60 + endMin;
+    return (endMinutes - startMinutes) / 60;
+  };
+
+  const estimatedPrice = lapangan ? calculateDuration() * lapangan.harga_per_jam : 0;
+
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
     setBookingError('');
     
     if (!user) {
       router.push('/auth/login');
+      return;
+    }
+
+    // Validasi jam selesai > jam mulai
+    const duration = calculateDuration();
+    if (duration <= 0) {
+      setBookingError('Jam selesai harus lebih besar dari jam mulai');
       return;
     }
 
@@ -145,7 +179,7 @@ export default function LapanganDetailPage({ params }: { params: { id: string } 
               <div className="mb-6">
                 <h3 className="text-xl font-semibold mb-3">Fasilitas</h3>
                 <div className="flex flex-wrap gap-2">
-                  {lapangan.fasilitas.map((fasilitas, idx) => (
+                  {parseJSON(lapangan.fasilitas).map((fasilitas: string, idx: number) => (
                     <span 
                       key={idx}
                       className="bg-blue-100 text-blue-700 px-3 py-1 rounded-lg"
@@ -224,6 +258,20 @@ export default function LapanganDetailPage({ params }: { params: { id: string } 
               onChange={(e) => setBookingData({ ...bookingData, jam_selesai: e.target.value })}
               required
             />
+
+            {/* Estimasi Harga */}
+            {bookingData.jam_mulai && bookingData.jam_selesai && calculateDuration() > 0 && (
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-gray-600">Durasi:</span>
+                  <span className="font-medium">{calculateDuration()} jam</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Estimasi Total:</span>
+                  <span className="font-bold text-blue-600">{formatRupiah(estimatedPrice)}</span>
+                </div>
+              </div>
+            )}
             
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
